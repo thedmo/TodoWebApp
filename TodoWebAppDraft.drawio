@@ -1,0 +1,71 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
+  <diagram id="HOX8nePt5A-wkNEOB8DQ" name="Seite-1">
+    <mxGraphModel dx="1338" dy="988" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-1" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;Todo Dto&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;ID&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;TodoText&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;DueDate : LocalDateTime?&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;Priority&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;Category&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;IsDone&lt;/b&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="320" y="1000" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-2" value="SQL Database" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="800" y="920" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-8" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;Priority : Enum&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px&quot;&gt;Priority_1 (niedrigste)&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;Priority_2&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;span&gt;Priority_3&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px&quot;&gt;Priority_4&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px&quot;&gt;Priority_5&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+          <mxGeometry x="640" y="200" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-9" value="ChatGPT API" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="640" y="680" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-10" value="AiCategoryService" style="html=1;dropTarget=0;" parent="1" vertex="1">
+          <mxGeometry x="480" y="680" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rMSssnAjmzmwVMzNf-B0-11" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" parent="rMSssnAjmzmwVMzNf-B0-10" vertex="1">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-1" value="CategoryPersistence" style="html=1;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="840" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-2" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="f1i7tJlHmHZAfz9CqFCC-1">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-3" value="TodoPersistence" style="html=1;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="1000" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-4" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="f1i7tJlHmHZAfz9CqFCC-3">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-5" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;CategoryDto&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;category: string&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;Color : string&lt;/b&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="840" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-6" value="CategoryService" style="html=1;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="840" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-7" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="f1i7tJlHmHZAfz9CqFCC-6">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-8" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;CategoryDbo&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;id&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;category: string&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px ; margin-left: 8px&quot;&gt;&lt;b&gt;Color : string&lt;/b&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="840" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-9" value="&lt;p style=&quot;margin: 0px ; margin-top: 4px ; text-align: center ; text-decoration: underline&quot;&gt;&lt;b&gt;TodoDbo&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;ID&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;TodoText&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;DueDate&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;Priority&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;Category&lt;/b&gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;&lt;b&gt;IsDone&lt;/b&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1000" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-10" value="TodoService" style="html=1;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1000" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="f1i7tJlHmHZAfz9CqFCC-11" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="f1i7tJlHmHZAfz9CqFCC-10">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
