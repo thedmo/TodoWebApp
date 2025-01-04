@@ -82,7 +82,7 @@ public class TodoService {
     @Transactional
     public void deleteAllEntries() {
         todoRepository.deleteAll();
-        todos.clear();
+        refreshTodos();
     }
 
     @Transactional
