@@ -1,7 +1,6 @@
 package hfu.java.todoapp.components.services;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import hfu.java.todoapp.common.entities.*;
@@ -11,6 +10,7 @@ import hfu.java.todoapp.components.repositories.CategoryRepository;
 import hfu.java.todoapp.components.repositories.TodoRepository;
 import hfu.java.todoapp.mapper.CategoryMapper;
 import hfu.java.todoapp.mapper.TodoMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -76,10 +76,27 @@ public class TodoService {
     @Transactional
     public void deleteTodoById(Integer id) {
         todoRepository.deleteById(id);
+        refreshTodos();
     }
 
     @Transactional
-    public void deleteAllEntries(){
-            todoRepository.deleteAll();
+    public void deleteAllEntries() {
+        todoRepository.deleteAll();
+        todos.clear();
+    }
+
+    @Transactional
+    public void updateTodoStatus(Integer id, boolean isDone) {
+        // Find the todo model from the local list
+        TodoModel todoModel = getAll().stream()
+                .filter(todo -> todo.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Todo not found with id: " + id));
+
+        // Update the status
+        todoModel.setDone(isDone);
+
+        // Save the updated model using the save method
+        save(todoModel);
     }
 }

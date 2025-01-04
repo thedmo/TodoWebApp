@@ -2,6 +2,7 @@ package hfu.java.todoapp.common.entities;
 
 import java.time.LocalDate;
 
+
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
