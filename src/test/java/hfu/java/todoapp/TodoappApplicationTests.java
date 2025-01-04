@@ -1,19 +1,13 @@
 package hfu.java.todoapp;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import hfu.java.todoapp.common.enums.Priority;
@@ -24,36 +18,18 @@ import hfu.java.todoapp.components.services.TodoService;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-
 @SpringBootTest
 @ActiveProfiles("test")
-@Execution(ExecutionMode.SAME_THREAD) 
+@Execution(ExecutionMode.SAME_THREAD)
 class TodoappApplicationTests {
 
-	@Autowired
 	private TodoService todoService;
-
-	@Autowired
 	private CategoryService categoryService;
 
-	@BeforeAll
-	static void createTestDatabase() {
-		try (Connection connection = DriverManager.getConnection(
-				"jdbc:postgresql://localhost:5432/postgres",
-				"postgres",
-				"postgres")) {
-
-			Statement statement = connection.createStatement();
-
-			statement.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'todoapp_test'");
-
-
-			statement.execute("DROP DATABASE IF EXISTS todos_test");
-			statement.execute("CREATE DATABASE todos_test");
-
-		} catch (SQLException e) {
-			throw new RuntimeException("Could not create test database", e);
-		}
+	@Autowired
+	public TodoappApplicationTests(TodoService todoService, CategoryService categoryService) {
+		this.todoService = todoService;
+		this.categoryService = categoryService;
 	}
 
 	@Test
@@ -70,9 +46,9 @@ class TodoappApplicationTests {
 		assertNotNull(allCategories);
 
 		var sameCategories = allCategories.stream()
-		.filter(c -> c.getName().equals("Work"))
-		.map(c -> c.getName())
-		.toList();
+				.filter(c -> c.getName().equals("Work"))
+				.map(c -> c.getName())
+				.toList();
 
 		assertTrue(sameCategories.size() == 1);
 	}
@@ -88,14 +64,17 @@ class TodoappApplicationTests {
 		categoryService.save(homeCategory);
 
 		// Create todos
+
+		String task1String = "testCategoryUniquenes: Complete project";
 		TodoModel workTodo = new TodoModel();
-		workTodo.setTask("Complete project");
+		workTodo.setTask(task1String);
 		workTodo.setPriority(Priority.Priority_1);
 		workTodo.setCategory(workCategory);
 		todoService.save(workTodo);
 
+		String task2String = "testCategoryUniquenes: Clean house";
 		TodoModel homeTodo = new TodoModel();
-		homeTodo.setTask("Clean house");
+		homeTodo.setTask(task2String);
 		homeTodo.setPriority(Priority.Priority_2);
 		homeTodo.setCategory(homeCategory);
 		todoService.save(homeTodo);
@@ -118,7 +97,7 @@ class TodoappApplicationTests {
 
 		// Find specific todo and verify its properties
 		TodoModel foundWorkTodo = allTodos.stream()
-				.filter(t -> t.getTask().equals("Complete project"))
+				.filter(t -> t.getTask().equals(task1String))
 				.findFirst()
 				.orElse(null);
 
@@ -129,7 +108,7 @@ class TodoappApplicationTests {
 
 		// Find specific todo with different category
 		TodoModel foundHomeTodo = allTodos.stream()
-				.filter(t -> t.getTask().equals("Clean house"))
+				.filter(t -> t.getTask().equals(task2String))
 				.findFirst()
 				.orElse(null);
 
@@ -137,5 +116,92 @@ class TodoappApplicationTests {
 		assertEquals(Priority.Priority_2, foundHomeTodo.getPriority());
 		assertEquals("Home", foundHomeTodo.getCategory().getName());
 		assertEquals("Blue", foundHomeTodo.getCategory().getColor());
+	}
+
+	@Test
+	void testUpdateTodo() {
+		// Create and save a new category
+		CategoryModel category = new CategoryModel("Work", "Red");
+		categoryService.save(category);
+
+		String taskString = "testUpdateTodo: Complete project";
+		String udpatedTaskString = "testUpdateTodo: Complete project - Updated";
+
+		// Create a new TodoModel
+		TodoModel todo = new TodoModel();
+		todo.setTask(taskString);
+		todo.setPriority(Priority.Priority_1);
+		todo.setCategory(category);
+
+		// Save the todo
+		TodoModel savedTodo = todoService.save(todo);
+		assertNotNull(savedTodo);
+		assertEquals(taskString, savedTodo.getTask());
+
+		// Retrieve the saved todo
+		TodoModel retrievedTodo = todoService.getAll().stream()
+				.filter(t -> t.getId() == savedTodo.getId())
+				.findFirst()
+				.orElse(null);
+		assertNotNull(retrievedTodo);
+
+		// Store the original ID for later comparison
+		int originalId = retrievedTodo.getId();
+
+		// Change some properties
+		retrievedTodo.setTask(udpatedTaskString);
+		retrievedTodo.setPriority(Priority.Priority_2);
+
+		// Save the updated todo
+		TodoModel updatedTodo = todoService.save(retrievedTodo);
+
+		// Retrieve the updated todo
+		TodoModel finalRetrievedTodo = todoService.getAll().stream()
+				.filter(t -> t.getId() == updatedTodo.getId())
+				.findFirst()
+				.orElse(null);
+
+		// Check if the properties were updated correctly
+		assertNotNull(finalRetrievedTodo);
+		assertEquals(udpatedTaskString, finalRetrievedTodo.getTask());
+		assertEquals(Priority.Priority_2, finalRetrievedTodo.getPriority());
+
+		// Check that the ID remains the same (not a new entry)
+		assertEquals(originalId, finalRetrievedTodo.getId());
+	}
+
+	@Test
+	public void testAddAndCompleteTasks() {
+		// Create and save a new category
+		CategoryModel category = new CategoryModel("Personal", "Blue");
+		categoryService.save(category);
+
+		// Create and save multiple TodoModels
+		String taskPrefix = "testAddAndCompleteTasks: ";
+		List<TodoModel> todos = new ArrayList<>();
+		for (int i = 1; i <= 6; i++) {
+			TodoModel todo = new TodoModel();
+			todo.setTask(taskPrefix + "Task " + i);
+			todo.setPriority(i % 2 == 0 ? Priority.Priority_2 : Priority.Priority_1);
+			todo.setCategory(category);
+			todos.add(todoService.save(todo));
+		}
+
+		// Retrieve the saved todos
+		List<TodoModel> retrievedTodos = todoService.getAll();
+		assertEquals(6, retrievedTodos.size());
+
+		// Mark half of them as completed
+		for (int i = 0; i < retrievedTodos.size() / 2; i++) {
+			TodoModel todoToUpdate = retrievedTodos.get(i);
+			todoToUpdate.setDone(true);
+			todoService.save(todoToUpdate);
+		}
+
+		// Verify that the updates were successful
+		List<TodoModel> updatedTodos = todoService.getCompleted();
+		for (TodoModel todo : updatedTodos) {
+			assertTrue(todo.isDone());
+		}
 	}
 }
