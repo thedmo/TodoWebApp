@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Todo list</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4">Todo App</h1>
+
+        <table id="todoTable" class="table table-sm">
+            <thead>
+                <tr>
+                    <th> </th>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Due date</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="todo : ${todos}">
+                    <td>
+                        <form th:action="@{/todos/updateStatus}" method="post" style="display: inline;">
+                            <input type="hidden" name="id" th:value="${todo.id}" />
+                            <input type="checkbox" name="isDone" th:checked="${todo.isDone}" th:value="true"
+                                class="auto-submit" />
+                        </form>
+                    </td>
+                    <td th:text="${todo.task}"></td>
+                    <td th:text="${todo.category.name}" th:style="'background-color: ' + ${todo.category.color}"></td>
+                    <td th:text="${todo.dueDate}"></td>
+                    <td th:text="${todo.priority}"></td>
+                    <td>
+                        <!-- Delete button appears only if isDone is true -->
+                        <form th:action="@{/todos/delete}" method="post" style="display: inline;" 
+                              th:if="${todo.isDone}">
+                            <input type="hidden" name="id" th:value="${todo.id}" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.querySelectorAll('.auto-submit').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                this.form.submit();
+            });
+        });
+    </script>
+</body>
+</html>
