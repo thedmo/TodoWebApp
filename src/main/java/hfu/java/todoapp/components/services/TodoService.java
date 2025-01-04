@@ -29,17 +29,17 @@ public class TodoService {
     public TodoModel save(TodoModel model) {
         // Find or create the category
         CategoryEntity categoryEntity = categoryRepository.findByName(model.getCategory().getName());
-        
+
         // Map the todo
         TodoEntity todoEntity = TodoMapper.map(model);
         todoEntity.setCategory(categoryEntity);
-        
+
         // Save the todo
         TodoEntity savedEntity = todoRepository.save(todoEntity);
-        
+
         // Refresh the cached list
         refreshTodos();
-        
+
         // Return the saved model
         TodoModel savedModel = TodoMapper.getModel(savedEntity);
         savedModel.setCategory(CategoryMapper.getModel(savedEntity.getCategory()));
@@ -53,16 +53,23 @@ public class TodoService {
         return todos;
     }
 
+    public List<TodoModel> getCompleted() {
+        return getAll()
+                .stream()
+                .filter(TodoModel::isDone)
+                .toList();
+    }
+
     @Transactional
     private void refreshTodos() {
         todos = todoRepository.findAll()
-            .stream()
-            .map(e -> {
-                TodoModel m = TodoMapper.getModel(e);
-                CategoryModel c = CategoryMapper.getModel(e.getCategory());
-                m.setCategory(c);
-                return m;
-            })
-            .toList();
+                .stream()
+                .map(e -> {
+                    TodoModel m = TodoMapper.getModel(e);
+                    CategoryModel c = CategoryMapper.getModel(e.getCategory());
+                    m.setCategory(c);
+                    return m;
+                })
+                .toList();
     }
 }
