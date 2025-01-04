@@ -72,4 +72,14 @@ public class TodoService {
                 })
                 .toList();
     }
+
+    @Transactional
+    public void deleteTodoById(Integer id) {
+        todoRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllEntries(){
+            todoRepository.deleteAll();
+    }
 }

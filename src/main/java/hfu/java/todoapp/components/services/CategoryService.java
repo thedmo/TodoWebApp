@@ -1,6 +1,5 @@
 package hfu.java.todoapp.components.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -23,18 +22,13 @@ public class CategoryService {
 
     @Transactional
     public CategoryModel save(CategoryModel model) {
-        CategoryEntity existingCategory = repository.findByName(model.getName());
-        
-        if (existingCategory != null) {
-            // Update existing category
-            existingCategory.setColor(model.getColor());
-            CategoryEntity updatedEntity = repository.save(existingCategory);
+        if (categories == null)
             refreshCategoryList();
-            return CategoryMapper.getModel(updatedEntity);
-        }
+
+        var catModel = categories.stream().filter(c -> c.getName().equals(model.getName())).findFirst().orElse(model);
+        CategoryEntity entity = CategoryMapper.getEntity(catModel);
         
-        // Create new category
-        CategoryEntity storedEntity = repository.save(CategoryMapper.getEntity(model));
+        CategoryEntity storedEntity = repository.save(entity);
         refreshCategoryList();
         return CategoryMapper.getModel(storedEntity);
     }
@@ -52,5 +46,15 @@ public class CategoryService {
                 .stream()
                 .map(CategoryMapper::getModel)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteCategoryById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllEntries(){
+            repository.deleteAll();
     }
 }

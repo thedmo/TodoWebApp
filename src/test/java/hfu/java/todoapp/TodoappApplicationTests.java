@@ -1,5 +1,6 @@
 package hfu.java.todoapp;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import hfu.java.todoapp.common.enums.Priority;
 import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.common.models.TodoModel;
+import hfu.java.todoapp.components.services.AiCategoryService;
 import hfu.java.todoapp.components.services.CategoryService;
 import hfu.java.todoapp.components.services.TodoService;
+import jakarta.inject.Qualifier;
+
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -25,11 +30,19 @@ class TodoappApplicationTests {
 
 	private TodoService todoService;
 	private CategoryService categoryService;
+	private AiCategoryService aiCategoryService;
 
 	@Autowired
-	public TodoappApplicationTests(TodoService todoService, CategoryService categoryService) {
+	public TodoappApplicationTests(TodoService todoService, CategoryService categoryService, AiCategoryService aiCategoryService) {
 		this.todoService = todoService;
 		this.categoryService = categoryService;
+		this.aiCategoryService = aiCategoryService;
+	}
+
+	@BeforeEach
+	void initializeTables() {
+		todoService.deleteAllEntries();
+		categoryService.deleteAllEntries();
 	}
 
 	@Test
@@ -65,14 +78,14 @@ class TodoappApplicationTests {
 
 		// Create todos
 
-		String task1String = "testCategoryUniquenes: Complete project";
+		String task1String = "testCategoryAndTodoOperations: Complete project";
 		TodoModel workTodo = new TodoModel();
 		workTodo.setTask(task1String);
 		workTodo.setPriority(Priority.Priority_1);
 		workTodo.setCategory(workCategory);
 		todoService.save(workTodo);
 
-		String task2String = "testCategoryUniquenes: Clean house";
+		String task2String = "testCategoryAndTodoOperations: Clean house";
 		TodoModel homeTodo = new TodoModel();
 		homeTodo.setTask(task2String);
 		homeTodo.setPriority(Priority.Priority_2);
@@ -187,8 +200,10 @@ class TodoappApplicationTests {
 			todos.add(todoService.save(todo));
 		}
 
-		// Retrieve the saved todos
-		List<TodoModel> retrievedTodos = todoService.getAll();
+		// Retrieve the saved todos with the specified prefix
+		List<TodoModel> retrievedTodos = todoService.getAll().stream()
+				.filter(t -> t.getTask().startsWith(taskPrefix))
+				.collect(Collectors.toList());
 		assertEquals(6, retrievedTodos.size());
 
 		// Mark half of them as completed
@@ -204,4 +219,23 @@ class TodoappApplicationTests {
 			assertTrue(todo.isDone());
 		}
 	}
+
+	@Test
+    void testRequestCategory() throws Exception {
+        String task = "Complete the project";
+
+        // Call the method under test and cache the result
+        String result = aiCategoryService.requestCategory(task);
+
+        // Retrieve all categories from the database
+        List<CategoryModel> allCategories = categoryService.getAll();
+
+        // Check if the new category was added
+        CategoryModel savedCategory = allCategories.stream()
+                .filter(c -> c.getName().equals(result))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(savedCategory);
+    }
 }
