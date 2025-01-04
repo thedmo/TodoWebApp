@@ -18,7 +18,6 @@ import hfu.java.todoapp.common.models.TodoModel;
 import hfu.java.todoapp.components.services.AiCategoryService;
 import hfu.java.todoapp.components.services.CategoryService;
 import hfu.java.todoapp.components.services.TodoService;
-import jakarta.inject.Qualifier;
 
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.parallel.ExecutionMode;
