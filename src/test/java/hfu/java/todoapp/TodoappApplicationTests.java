@@ -46,7 +46,8 @@ class TodoappApplicationTests {
 
 	@Test
 	void testCategoryUniquenes() {
-		CategoryModel workCategory = new CategoryModel("Work", "Red");
+		initializeTables();
+		CategoryModel workCategory = new CategoryModel("Work", "#FF0000");
 		categoryService.save(workCategory);
 		categoryService.save(workCategory);
 		categoryService.save(workCategory);
@@ -67,16 +68,19 @@ class TodoappApplicationTests {
 
 	@Test
 	void testCategoryAndTodoOperations() {
-		// Create test categories
-		CategoryModel workCategory = new CategoryModel("Work", "Red");
-		CategoryModel homeCategory = new CategoryModel("Home", "Blue");
+		initializeTables();
+		
+		// Create test categories with consistent color values
+		String workColor = "#FF5733";
+		String homeColor = "#0000FF";
+		CategoryModel workCategory = new CategoryModel("Work", workColor);
+		CategoryModel homeCategory = new CategoryModel("Home", homeColor);
 
 		// Save categories
-		categoryService.save(workCategory);
-		categoryService.save(homeCategory);
+		workCategory = categoryService.save(workCategory);  // Store the returned category
+		homeCategory = categoryService.save(homeCategory);  // Store the returned category
 
 		// Create todos
-
 		String task1String = "testCategoryAndTodoOperations: Complete project";
 		TodoModel workTodo = new TodoModel();
 		workTodo.setTask(task1String);
@@ -94,18 +98,12 @@ class TodoappApplicationTests {
 		// Test category retrieval
 		List<CategoryModel> allCategories = categoryService.getAll();
 		assertNotNull(allCategories);
-		assertTrue(allCategories.size() >= 2);
-		assertTrue(allCategories.stream()
-				.filter(c -> c.getName().equals("Work"))
-				.map(c -> c.getName())
-				.toList()
-				.size() == 1);
-		assertTrue(allCategories.stream().anyMatch(c -> c.getName().equals("Home")));
+		assertEquals(2, allCategories.size());
 
 		// Test todo retrieval
 		List<TodoModel> allTodos = todoService.getAll();
 		assertNotNull(allTodos);
-		assertTrue(allTodos.size() >= 2);
+		assertEquals(2, allTodos.size());
 
 		// Find specific todo and verify its properties
 		TodoModel foundWorkTodo = allTodos.stream()
@@ -116,7 +114,7 @@ class TodoappApplicationTests {
 		assertNotNull(foundWorkTodo);
 		assertEquals(Priority.Priority_1, foundWorkTodo.getPriority());
 		assertEquals("Work", foundWorkTodo.getCategory().getName());
-		assertEquals("Red", foundWorkTodo.getCategory().getColor());
+		assertEquals(workColor, foundWorkTodo.getCategory().getColor());
 
 		// Find specific todo with different category
 		TodoModel foundHomeTodo = allTodos.stream()
@@ -127,13 +125,14 @@ class TodoappApplicationTests {
 		assertNotNull(foundHomeTodo);
 		assertEquals(Priority.Priority_2, foundHomeTodo.getPriority());
 		assertEquals("Home", foundHomeTodo.getCategory().getName());
-		assertEquals("Blue", foundHomeTodo.getCategory().getColor());
+		assertEquals(homeColor, foundHomeTodo.getCategory().getColor());
 	}
 
 	@Test
 	void testUpdateTodo() {
+		initializeTables();
 		// Create and save a new category
-		CategoryModel category = new CategoryModel("Work", "Red");
+		CategoryModel category = new CategoryModel("Work", "#FF0000");
 		categoryService.save(category);
 
 		String taskString = "testUpdateTodo: Complete project";
@@ -184,8 +183,9 @@ class TodoappApplicationTests {
 
 	@Test
 	public void testAddAndCompleteTasks() {
+		initializeTables();
 		// Create and save a new category
-		CategoryModel category = new CategoryModel("Personal", "Blue");
+		CategoryModel category = new CategoryModel("Personal", "#0000FF");
 		categoryService.save(category);
 
 		// Create and save multiple TodoModels
@@ -221,20 +221,16 @@ class TodoappApplicationTests {
 
 	@Test
     void testRequestCategory() throws Exception {
+        initializeTables();
         String task = "Complete the project";
 
-        // Call the method under test and cache the result
-        String result = aiCategoryService.requestCategory(task);
+		CategoryModel cat = aiCategoryService.requestCategory(task);
 
-        // Retrieve all categories from the database
-        List<CategoryModel> allCategories = categoryService.getAll();
+		CategoryModel savedCategory = categoryService.getById(cat.getId());
 
-        // Check if the new category was added
-        CategoryModel savedCategory = allCategories.stream()
-                .filter(c -> c.getName().equals(result))
-                .findFirst()
-                .orElse(null);
 
         assertNotNull(savedCategory);
+		assertEquals(cat.getName(), savedCategory.getName());
+		assertEquals(cat.getColor(), savedCategory.getColor());
     }
 }
