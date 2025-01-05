@@ -8,6 +8,7 @@ import hfu.java.todoapp.common.entities.CategoryEntity;
 import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.components.repositories.CategoryRepository;
 import hfu.java.todoapp.mapper.CategoryMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -27,7 +28,7 @@ public class CategoryService {
 
         var catModel = categories.stream().filter(c -> c.getName().equals(model.getName())).findFirst().orElse(model);
         CategoryEntity entity = CategoryMapper.getEntity(catModel);
-        
+
         CategoryEntity storedEntity = repository.save(entity);
         refreshCategoryList();
         return CategoryMapper.getModel(storedEntity);
@@ -38,6 +39,13 @@ public class CategoryService {
             refreshCategoryList();
 
         return categories;
+    }
+
+    public CategoryModel getById(int id) {
+        return categories.stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("No entry with id " + id + " found in categories."));
     }
 
     @Transactional
@@ -54,7 +62,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteAllEntries(){
-            repository.deleteAll();
+    public void deleteAllEntries() {
+        repository.deleteAll();
     }
 }
