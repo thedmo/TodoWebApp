@@ -1,7 +1,5 @@
 package hfu.java.todoapp.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +12,6 @@ import hfu.java.todoapp.components.services.TodoService;
 
 @Controller
 public class ListController {
-
-    private ArrayList<String> list = new ArrayList<>();
     private TodoService todoService;
 
     @Autowired
@@ -23,28 +19,15 @@ public class ListController {
         this.todoService = todoService;
     }
 
-    @GetMapping("/addItem")
-    public String showAddPage() {
-        return "addItem";
-    }
-
-    @PostMapping("/addNew")
-    public String addItem(@RequestParam("newItem") String newItem, Model model) {
-        list.add(newItem);
-
-        model.addAttribute("dataList", list);
-        return "redirect:/home";
+    @GetMapping("/")
+    public String redirectList(Model model) {
+        return "redirect:/todos/list";
     }
 
     @GetMapping("/todos/list")
     public String list(Model model) {
         model.addAttribute("todos", todoService.getAll());
         return "list";
-    }
-
-    @GetMapping("/")
-    public String redirectList(Model model) {
-        return "redirect:/todos/list";
     }
 
     @PostMapping("/todos/updateStatus")
@@ -56,7 +39,8 @@ public class ListController {
 
     @PostMapping("/todos/delete")
     public String deleteTodo(@RequestParam("id") Integer id) {
-        todoService.deleteTodoById(id);;
+        todoService.deleteTodoById(id);
+        ;
         return "redirect:/todos/list";
     }
 }
