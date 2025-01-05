@@ -60,6 +60,13 @@ public class TodoService {
                 .toList();
     }
 
+    public TodoModel getById(Integer id) {
+        return todos.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Todo not found with id: " + id));
+    }
+
     @Transactional
     private void refreshTodos() {
         todos = todoRepository.findAll()
