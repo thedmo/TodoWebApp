@@ -11,6 +11,10 @@
 <body>
     <div class="container">
         <h1 class="mt-4">Todo App</h1>
+        
+        <form th:action="@{/todos/newTask}" method="get" style="margin-bottom: 20px;">
+            <button type="submit" class="btn btn-primary">New Todo</button>
+        </form>
 
         <table id="todoTable" class="table table-sm">
             <thead>
@@ -36,9 +40,15 @@
                     <td th:text="${todo.dueDate}"></td>
                     <td th:text="${todo.priority}"></td>
                     <td>
+                        <form th:action="@{/todos/editTask}" method="get">
+                            <input type="hidden" name="id" th:value="${todo.id}"/>
+                            <button type="submit">edit</button>
+                        </form>
+                    </td>
+                    <td>
                         <!-- Delete button appears only if isDone is true -->
-                        <form th:action="@{/todos/delete}" method="post" style="display: inline;" 
-                              th:if="${todo.isDone}">
+                        <form th:action="@{/todos/delete}" method="post" style="display: inline;"
+                            th:if="${todo.isDone}">
                             <input type="hidden" name="id" th:value="${todo.id}" />
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
@@ -56,4 +66,5 @@
         });
     </script>
 </body>
+
 </html>
