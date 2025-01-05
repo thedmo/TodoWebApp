@@ -27,7 +27,7 @@ public class AiCategoryServiceImpl implements AiCategoryService {
     }
 
     @Override
-    public String requestCategory(String task) {
+    public CategoryModel requestCategory(String task) {
         StringBuilder prompStringBuilder = new StringBuilder();
         prompStringBuilder
                 .append("Find a matching category for the following task: ")
@@ -64,8 +64,6 @@ public class AiCategoryServiceImpl implements AiCategoryService {
         CategoryModel newCatModel = new CategoryModel(catString);
         newCatModel.setColor(colstring);
 
-        categoryService.save(newCatModel);
-
-        return catString;
+        return categoryService.save(newCatModel);
     }
 }
