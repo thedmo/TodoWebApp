@@ -2,6 +2,8 @@ package hfu.java.todoapp.common.models;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import hfu.java.todoapp.common.enums.Priority;
 
 public class TodoModel {
@@ -52,6 +54,7 @@ public class TodoModel {
         this.isDone = isDone;
     }
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     public LocalDate getDueDate() {
         return dueDate;
     }
