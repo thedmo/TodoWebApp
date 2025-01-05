@@ -1,6 +1,8 @@
 package hfu.java.todoapp.common.entities;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -15,6 +17,9 @@ public class CategoryEntity {
     @Column(name = "color")
     private String color;
 
+    @OneToMany(mappedBy = "category")
+    private Set<TodoEntity> todos = new HashSet<>();
+
     public int getId() {
         return id;
     }
@@ -23,12 +28,12 @@ public class CategoryEntity {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getColor() {
@@ -37,5 +42,9 @@ public class CategoryEntity {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Set<TodoEntity> getTodos() {
+        return todos;
     }
 }

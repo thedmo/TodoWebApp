@@ -11,7 +11,7 @@
 <body>
     <h1>Edit Task</h1>
 
-    <form th:action="@{/todos/updateTask}" method="post" th:object="${todo}">
+    <form th:action="@{/todos/updateTask}" method="post" th:object="${todo}" class="d-inline">
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
@@ -45,10 +45,11 @@
 
         <div class="form-group">
             <label for="aiCategoryCheckbox">Automatic category generation for this task</label>
-            <input type="checkbox" id="aiCategoryCheckbox" name="aiCategory" />
+            <input type="checkbox" id="aiCategoryCheckbox" name="aiCategory" th:value="true" th:checked="${todo.category == null}"/>
         </div>
+        
 
-        <button type="submit" class="btn btn-primary">Update Task</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Update</button>
     </form>
 
     <form th:action="@{/todos/list}" method="get">
@@ -57,13 +58,9 @@
 
     <script>
         var dropDown = document.getElementById('categoryDropDown');
-
-        if (dropDown.value === '-1') {
-            document.getElementById('aiCategoryCheckbox').checked = true;
-        }
+        var aiCheckbox = document.getElementById('aiCategoryCheckbox');
 
         dropDown.addEventListener('change', function() {
-            var aiCheckbox = document.getElementById('aiCategoryCheckbox');
             if (this.value === '-1') {
                 aiCheckbox.checked = true;
             } else {

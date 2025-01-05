@@ -233,4 +233,59 @@ class TodoappApplicationTests {
 		assertEquals(cat.getName(), savedCategory.getName());
 		assertEquals(cat.getColor(), savedCategory.getColor());
     }
+
+	@Test
+	void testCategoryCount() {
+		initializeTables();
+		
+		// Create test categories
+		CategoryModel workCategory = new CategoryModel("Work", "#FF5733");
+		CategoryModel homeCategory = new CategoryModel("Home", "#0000FF");
+		
+		// Save categories
+		workCategory = categoryService.save(workCategory);
+		homeCategory = categoryService.save(homeCategory);
+		
+		// Create and save multiple todos for work category
+		for (int i = 1; i <= 3; i++) {
+			TodoModel todo = new TodoModel();
+			todo.setTask("Work Task " + i);
+			todo.setPriority(Priority.Priority_1);
+			todo.setCategory(workCategory);
+			todoService.save(todo);
+		}
+		
+		// Create and save multiple todos for home category
+		for (int i = 1; i <= 2; i++) {
+			TodoModel todo = new TodoModel();
+			todo.setTask("Home Task " + i);
+			todo.setPriority(Priority.Priority_2);
+			todo.setCategory(homeCategory);
+			todoService.save(todo);
+		}
+		
+		// Test the counts
+		assertEquals(3, categoryService.countTodos(workCategory.getId()));
+		assertEquals(2, categoryService.countTodos(homeCategory.getId()));
+		
+		// Add one more todo to work category
+		TodoModel extraTodo = new TodoModel();
+		extraTodo.setTask("Extra Work Task");
+		extraTodo.setPriority(Priority.Priority_1);
+		extraTodo.setCategory(workCategory);
+		todoService.save(extraTodo);
+		
+		// Verify updated count
+		assertEquals(4, categoryService.countTodos(workCategory.getId()));
+		
+		// Delete a todo and verify count decreases
+		TodoModel todoToDelete = todoService.getAll().stream()
+				.filter(t -> t.getTask().equals("Work Task 1"))
+				.findFirst()
+				.orElseThrow();
+		
+		todoService.deleteTodoById(todoToDelete.getId());
+		
+		assertEquals(3, categoryService.countTodos(workCategory.getId()));
+	}
 }

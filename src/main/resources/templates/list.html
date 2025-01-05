@@ -12,9 +12,14 @@
     <div class="container">
         <h1 class="mt-4">Todo App</h1>
         
-        <form th:action="@{/todos/newTask}" method="get" style="margin-bottom: 20px;">
-            <button type="submit" class="btn btn-primary">New Todo</button>
-        </form>
+        <div class="d-flex mb-3">
+            <form th:action="@{/todos/newTask}" method="get" class="me-2">
+                <button type="submit" class="btn btn-primary">New Todo</button>
+            </form>
+            <form th:action="@{/todos/categories/list}" method="get">
+                <button type="submit" class="btn btn-secondary">Manage Categories</button>
+            </form>
+        </div>
 
         <table id="todoTable" class="table table-sm">
             <thead>

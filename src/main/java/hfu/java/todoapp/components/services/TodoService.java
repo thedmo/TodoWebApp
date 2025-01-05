@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import hfu.java.todoapp.common.entities.*;
-import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.common.models.TodoModel;
 import hfu.java.todoapp.components.repositories.CategoryRepository;
 import hfu.java.todoapp.components.repositories.TodoRepository;
@@ -23,6 +22,7 @@ public class TodoService {
     public TodoService(TodoRepository todoRepository, CategoryRepository categoryRepository) {
         this.todoRepository = todoRepository;
         this.categoryRepository = categoryRepository;
+        refreshTodos();
     }
 
     @Transactional
@@ -37,9 +37,6 @@ public class TodoService {
         // Save the todo
         TodoEntity savedEntity = todoRepository.save(todoEntity);
 
-        // Refresh the cached list
-        refreshTodos();
-
         // Return the saved model
         TodoModel savedModel = TodoMapper.getModel(savedEntity);
         savedModel.setCategory(CategoryMapper.getModel(savedEntity.getCategory()));
@@ -47,13 +44,12 @@ public class TodoService {
     }
 
     public List<TodoModel> getAll() {
-        if (todos == null) {
-            refreshTodos();
-        }
+        refreshTodos();
         return todos;
     }
 
     public List<TodoModel> getCompleted() {
+        refreshTodos();
         return getAll()
                 .stream()
                 .filter(TodoModel::isDone)
@@ -61,6 +57,7 @@ public class TodoService {
     }
 
     public TodoModel getById(Integer id) {
+        refreshTodos();
         return todos.stream()
                 .filter(t -> t.getId().equals(id))
                 .findFirst()
@@ -73,8 +70,7 @@ public class TodoService {
                 .stream()
                 .map(e -> {
                     TodoModel m = TodoMapper.getModel(e);
-                    CategoryModel c = CategoryMapper.getModel(e.getCategory());
-                    m.setCategory(c);
+                    m.setCategory(CategoryMapper.getModel(e.getCategory()));
                     return m;
                 })
                 .toList();
@@ -83,13 +79,11 @@ public class TodoService {
     @Transactional
     public void deleteTodoById(Integer id) {
         todoRepository.deleteById(id);
-        refreshTodos();
     }
 
     @Transactional
     public void deleteAllEntries() {
         todoRepository.deleteAll();
-        refreshTodos();
     }
 
     @Transactional

@@ -4,6 +4,7 @@ public class CategoryModel {
     private Integer id = null;
     private String name;
     private String color;
+    private int usageCount;
 
     public Integer getId() {
         return id;
@@ -34,5 +35,13 @@ public class CategoryModel {
         super();
         this.name = name;
         this.color = color;
+    }
+
+    public int getUsageCount() {
+        return usageCount;
+    }
+
+    public void setUsageCount(int usageCount) {
+        this.usageCount = usageCount;
     }
 }
