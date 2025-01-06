@@ -9,63 +9,109 @@
 </head>
 
 <body>
-    <h1>Edit Task</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0" th:text="${todo.id == null ? 'Create New Task' : 'Edit Task'}"></h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/todos/updateTask}" method="post" th:object="${todo}">
+                            <input type="hidden" th:field="*{id}" />
 
-    <form th:action="@{/todos/updateTask}" method="post" th:object="${todo}" class="d-inline">
-        <input type="hidden" th:field="*{id}" />
+                            <div class="form-group">
+                                <label for="task">Task Description</label>
+                                <input type="text" id="task" th:field="*{task}" class="form-control" required />
+                            </div>
 
-        <div class="form-group">
-            <label for="task">Task</label>
-            <input type="text" id="task" th:field="*{task}" class="form-control" required />
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="priority">Priority</label>
+                                    <select id="priority" class="form-control" th:field="*{priority}">
+                                        <option th:each="priority : ${T(hfu.java.todoapp.common.enums.Priority).values()}"
+                                            th:text="${priority.toString()}" th:value="${priority.name()}"
+                                            th:selected="${priority == todo.priority}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="dueDate">Due Date</label>
+                                    <input type="date" id="dueDate" th:field="*{dueDate}" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Category</label>
+                                <div class="d-flex align-items-center">
+                                    <select name="categoryId" class="form-control mr-2">
+                                        <option value="-1">Select Category</option>
+                                        <option th:each="category : ${categories}" 
+                                                th:value="${category.id}"
+                                                th:text="${category.name}"
+                                                th:selected="${todo.category != null && todo.category.id == category.id}">
+                                        </option>
+                                    </select>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="aiCategory" name="aiCategory">
+                                        <label class="custom-control-label" for="aiCategory">Use AI Category</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="/todos/list" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="priority">Priority</label>
-            <select id="priority" class="form-control" th:field="*{priority}">
-                <option th:each="priority : ${T(hfu.java.todoapp.common.enums.Priority).values()}"
-                    th:text="${priority.toString()}" th:value="${priority.name()}"
-                    th:selected="${priority == todo.priority}"></option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="dueDate">Due date</label>
-            <input type="date" id="dueDate" th:field="*{dueDate}" />
-        </div>
-
-        <div class="form-group">
-            <label for="categoryDropDown">Category</label>
-            <select id="categoryDropDown" name="categoryId" class="form-control">
-                <option value="-1">No Category</option>
-                <option th:each="cat : ${categories}" th:text="${cat.name}"
-                    th:style="'background-color: ' + ${cat.color}" th:value="${cat.id}"
-                    th:selected="${todo.category != null and cat.id == todo.category.id}"></option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="aiCategoryCheckbox">Automatic category generation for this task</label>
-            <input type="checkbox" id="aiCategoryCheckbox" name="aiCategory" th:value="true" th:checked="${todo.category == null}"/>
-        </div>
-        
-
-        <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Update</button>
-    </form>
-
-    <form th:action="@{/todos/list}" method="get">
-        <button th:text="back" type="submit" class="btn btn-secondary"></button>
-    </form>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        var dropDown = document.getElementById('categoryDropDown');
-        var aiCheckbox = document.getElementById('aiCategoryCheckbox');
+        $(document).ready(function() {
+            // Function to check if form is valid
+            function updateSubmitButton() {
+                const categoryId = $('select[name="categoryId"]').val();
+                const aiChecked = $('#aiCategory').is(':checked');
+                const submitButton = $('button[type="submit"]');
+                const taskText = $('#task').val().trim();
 
-        dropDown.addEventListener('change', function() {
-            if (this.value === '-1') {
-                aiCheckbox.checked = true;
-            } else {
-                aiCheckbox.checked = false;
+                // Disable button if no category is selected and AI is off
+                if ((categoryId !== '-1' || aiChecked) && taskText !== '') {
+                    submitButton.prop('disabled', false);
+                } else {
+                    submitButton.prop('disabled', true);
+                }
             }
+
+            // Handle AI Category checkbox
+            $('#aiCategory').change(function() {
+                if ($(this).is(':checked')) {
+                    $('select[name="categoryId"]').prop('disabled', true);
+                } else {
+                    $('select[name="categoryId"]').prop('disabled', false);
+                }
+                updateSubmitButton();
+            });
+
+            // Handle category selection changes
+            $('select[name="categoryId"]').change(function() {
+                updateSubmitButton();
+            });
+
+            // task text change
+            $('#task').on('input', function() {
+                updateSubmitButton();
+            });
+            
+            // Initial check on page load
+            updateSubmitButton();
         });
     </script>
 </body>
