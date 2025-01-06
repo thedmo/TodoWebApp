@@ -44,7 +44,7 @@ public class CategoryService {
         CategoryEntity entity = CategoryMapper.getEntity(catModel);
 
         CategoryEntity storedEntity = repository.save(entity);
-        // refreshCategoryList();
+        refreshCategoryList();
         return CategoryMapper.getModel(storedEntity);
     }
 

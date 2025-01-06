@@ -40,6 +40,8 @@ public class TodoService {
         // Return the saved model
         TodoModel savedModel = TodoMapper.getModel(savedEntity);
         savedModel.setCategory(CategoryMapper.getModel(savedEntity.getCategory()));
+
+        refreshTodos();
         return savedModel;
     }
 
