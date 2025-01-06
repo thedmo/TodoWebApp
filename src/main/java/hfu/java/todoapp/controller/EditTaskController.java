@@ -40,7 +40,7 @@ public class EditTaskController {
     @PostMapping("/todos/updateTask")
     public String saveTask(
             @ModelAttribute TodoModel task,
-            @RequestParam("categoryId") Integer categoryId,
+            @RequestParam(value = "categoryId", required = false, defaultValue = "-1") Integer categoryId,
             @RequestParam(value = "aiCategory", required = false, defaultValue = "false") boolean aiCategory,
             Model model) {
 
