@@ -12,6 +12,13 @@
     <div class="container mt-4">
         <h2>Manage Categories</h2>
 
+        <!-- Back Button -->
+        <div class="mt-3">
+            <form th:action="@{/todos/list}" method="get">
+                <button type="submit" class="btn btn-secondary">Back to Todo List</button>
+            </form>
+        </div>
+
         <!-- Add New Category Form -->
         <div class="card mb-4">
             <div class="card-header">
@@ -78,13 +85,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-
-        <!-- Back Button -->
-        <div class="mt-3">
-            <form th:action="@{/todos/list}" method="get">
-                <button type="submit" class="btn btn-secondary">Back to Todo List</button>
-            </form>
         </div>
     </div>
     <script>
