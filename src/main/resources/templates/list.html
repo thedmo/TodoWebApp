@@ -1,71 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <title>Todo list</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="mt-4">Todo App</h1>
+    <div class="container mt-4">
+        <h1>Just Todo it 2 the web</h1>
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+            <h2>Tasks</h2>
 
-        <div class="d-flex mb-3">
-            <form th:action="@{/todos/newTask}" method="get" class="me-2">
-                <button type="submit" class="btn btn-primary">New Todo</button>
-            </form>
-            <form th:action="@{/todos/categories/list}" method="get">
-                <button type="submit" class="btn btn-secondary">Manage Categories</button>
-            </form>
+            <div class="d-flex">
+                <form th:action="@{/todos/newTask}" method="get" class="mr-2">
+                    <button type="submit" class="btn btn-primary">New Todo</button>
+                </form>
+                <form th:action="@{/todos/categories/list}" method="get">
+                    <button type="submit" class="btn btn-secondary">Manage Categories</button>
+                </form>
+            </div>
         </div>
-        <div class="card"></div>
-        <div class="card-header">
-            Planned tasks
-        </div>
-        <div class="card-body">
-            <table id="todoTable" class="table table-sm">
-                <thead>
-                    <tr>
-                        <th> </th>
-                        <th>Task</th>
-                        <th>Category</th>
-                        <th>Due date</th>
-                        <th>Priority</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="todo : ${todos}">
-                        <td>
-                            <form th:action="@{/todos/updateStatus}" method="post" style="display: inline;">
-                                <input type="hidden" name="id" th:value="${todo.id}" />
-                                <input type="checkbox" name="isDone" th:checked="${todo.isDone}" th:value="true"
-                                    class="auto-submit" />
-                            </form>
-                        </td>
-                        <td th:text="${todo.task}"></td>
-                        <td th:text="${todo.category.name}" th:style="'background-color: ' + ${todo.category.color}">
-                        </td>
-                        <td th:text="${todo.dueDate}"></td>
-                        <td th:text="${todo.priority}"></td>
-                        <td>
-                            <form th:action="@{/todos/editTask}" method="get">
-                                <input type="hidden" name="id" th:value="${todo.id}" />
-                                <button type="submit">edit</button>
-                            </form>
-                        </td>
-                        <td>
-                            <!-- Delete button appears only if isDone is true -->
-                            <form th:action="@{/todos/delete}" method="post" style="display: inline;"
-                                th:if="${todo.isDone}">
-                                <input type="hidden" name="id" th:value="${todo.id}" />
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <div class="card">
+            <div class="card-header">
+                Planned tasks
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="todoTable" class="table" th:data-sort-column="${sortColumn}"
+                        th:data-sort-direction="${ascending ? 'asc' : 'desc'}">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <form th:action="@{/todos/updateSort}" method="post">
+                                        <input type="hidden" name="column" th:value="0" />
+                                        <input type="hidden" name="ascending" th:value="${ascending}" />
+                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Done <span th:if="${sortColumn == 0}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>
+                                    <form th:action="@{/todos/updateSort}" method="post">
+                                        <input type="hidden" name="column" th:value="1" />
+                                        <input type="hidden" name="ascending" th:value="${ascending}" />
+                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Task <span th:if="${sortColumn == 1}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>
+                                    <form th:action="@{/todos/updateSort}" method="post">
+                                        <input type="hidden" name="column" th:value="2" />
+                                        <input type="hidden" name="ascending" th:value="${ascending}" />
+                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Category <span th:if="${sortColumn == 2}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>
+                                    <form th:action="@{/todos/updateSort}" method="post">
+                                        <input type="hidden" name="column" th:value="3" />
+                                        <input type="hidden" name="ascending" th:value="${ascending}" />
+                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Due date <span th:if="${sortColumn == 3}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>
+                                    <form th:action="@{/todos/updateSort}" method="post">
+                                        <input type="hidden" name="column" th:value="4" />
+                                        <input type="hidden" name="ascending" th:value="${ascending}" />
+                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Priority <span th:if="${sortColumn == 4}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="todo : ${todos}">
+                                <td th:data-order="${todo.isDone ? 1 : 0}">
+                                    <form th:action="@{/todos/updateStatus}" method="post" style="display: inline;">
+                                        <input type="checkbox" name="isDone" th:checked="${todo.isDone}"
+                                            class="auto-submit" formmethod="dialog" />
+                                        <input type="hidden" name="id" th:value="${todo.id}" />
+                                    </form>
+                                </td>
+                                <td th:text="${todo.task}"></td>
+                                <td th:text="${todo.category.name}"
+                                    th:style="'background-color: ' + ${todo.category.color}">
+                                </td>
+                                <td th:text="${todo.dueDate}"></td>
+                                <td>
+                                    <container>
+                                        <div type="hidden" th:value="${todo.priority.value}"></div>
+                                        <div th:text="${todo.priority}"></div>
+                                    </container>
+                                </td>
+                                <td>
+                                    <form th:action="@{/todos/editTask}" method="get">
+                                        <input type="hidden" name="id" th:value="${todo.id}" />
+                                        <button type="submit">edit</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <!-- Delete button appears only if isDone is true -->
+                                    <form th:action="@{/todos/delete}" method="post" style="display: inline;"
+                                        th:if="${todo.isDone}">
+                                        <input type="hidden" name="id" th:value="${todo.id}" />
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

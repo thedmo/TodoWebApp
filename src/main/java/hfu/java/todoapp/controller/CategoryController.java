@@ -12,6 +12,8 @@ import hfu.java.todoapp.components.services.CategoryService;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private int sortColumn = 0; // Default to Name column
+    private boolean ascending = true;
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -19,9 +21,10 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public String showManagePage(Model model) {
-        model.addAttribute("categories", categoryService.getAll());
-        model.addAttribute("categoryService", categoryService);
+    public String showCategories(Model model) {
+        model.addAttribute("categories", categoryService.getAllSorted(sortColumn, ascending));
+        model.addAttribute("sortColumn", sortColumn);
+        model.addAttribute("ascending", ascending);
         return "categoriesList";
     }
 
@@ -47,4 +50,12 @@ public class CategoryController {
         }
         return "redirect:/todos/categories/list";
     }
-} 
+
+    @PostMapping("/updateSort")
+    public String updateSort(@RequestParam("column") int column,
+            @RequestParam("ascending") boolean ascending) {
+        this.sortColumn = column;
+        this.ascending = ascending;
+        return "redirect:/todos/categories/list";
+    }
+}

@@ -1,13 +1,14 @@
 package hfu.java.todoapp.components.services;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.springframework.stereotype.Service;
 
 import hfu.java.todoapp.common.entities.CategoryEntity;
 import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.components.repositories.CategoryRepository;
-import hfu.java.todoapp.components.repositories.TodoRepository;
 import hfu.java.todoapp.mapper.CategoryMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -16,12 +17,10 @@ import jakarta.transaction.Transactional;
 public class CategoryService {
 
     private final CategoryRepository repository;
-    private final TodoRepository todoRepository;
     private List<CategoryModel> categories;
 
-    public CategoryService(CategoryRepository repository, TodoRepository todoRepository) {
+    public CategoryService(CategoryRepository repository) {
         this.repository = repository;
-        this.todoRepository = todoRepository;
         refreshCategoryList();
     }
     
@@ -59,7 +58,6 @@ public class CategoryService {
         categories = categoryEntities.stream()
                 .map(entity -> {
                     CategoryModel model = CategoryMapper.getModel(entity);
-                    model.setUsageCount(todoRepository.countByCategory_Id(entity.getId()));
                     return model;
                 })
                 .toList();
@@ -75,5 +73,23 @@ public class CategoryService {
     public void deleteAllEntries() {
         repository.deleteAll();
         // refreshCategoryList();
+    }
+
+    public List<CategoryModel> getAllSorted(int column, boolean ascending) {
+        List<CategoryModel> sortedList = new ArrayList<>(getAll());
+        
+        Comparator<CategoryModel> comparator = switch (column) {
+            case 0 -> Comparator.comparing(CategoryModel::getName);
+            case 1 -> Comparator.comparing(CategoryModel::getColor);
+            case 2 -> Comparator.comparing(CategoryModel::getUsageCount);
+            default -> Comparator.comparing(CategoryModel::getName);
+        };
+        
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        
+        sortedList.sort(comparator);
+        return sortedList;
     }
 }

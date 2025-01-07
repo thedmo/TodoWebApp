@@ -17,7 +17,7 @@ public class CategoryEntity {
     @Column(name = "color")
     private String color;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<TodoEntity> todos = new HashSet<>();
 
     public int getId() {

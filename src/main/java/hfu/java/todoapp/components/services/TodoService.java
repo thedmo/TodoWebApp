@@ -1,6 +1,12 @@
 package hfu.java.todoapp.components.services;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+
 import org.springframework.stereotype.Service;
 
 import hfu.java.todoapp.common.entities.*;
@@ -101,5 +107,43 @@ public class TodoService {
 
         // Save the updated model using the save method
         save(todoModel);
+    }
+
+    private List<Integer> lastSortOrder;
+
+    public List<TodoModel> getAllSorted(int column, boolean ascending, boolean keepOrder) {
+        List<TodoModel> sortedList = new ArrayList<>(getAll());
+
+        if (keepOrder) {
+            if (lastSortOrder != null) {
+                Map<Integer, Integer> orderMap = new HashMap<>();
+                for (int i = 0; i < lastSortOrder.size(); i++) {
+                    orderMap.put(lastSortOrder.get(i), i);
+                }
+                sortedList.sort(Comparator.comparing(todo -> orderMap.getOrDefault(todo.getId(), Integer.MAX_VALUE)));
+            }
+        } else {
+
+            Comparator<TodoModel> comparator = switch (column) {
+                case 0 -> Comparator.comparing(TodoModel::isDone);
+                case 1 -> Comparator.comparing(TodoModel::getTask);
+                case 2 -> Comparator.comparing(todo -> todo.getCategory().getName());
+                case 3 -> Comparator.comparing(TodoModel::getDueDate,
+                        Comparator.nullsLast(Comparator.naturalOrder()));
+                case 4 -> Comparator.comparing(todo -> todo.getPriority().getValue());
+                default -> Comparator.comparing(TodoModel::isDone);
+            };
+
+            if (!ascending) {
+                comparator = comparator.reversed();
+            }
+
+            sortedList.sort(comparator);
+        }
+        lastSortOrder = sortedList.stream()
+                .map(TodoModel::getId)
+                .collect(Collectors.toList());
+
+        return sortedList;
     }
 }

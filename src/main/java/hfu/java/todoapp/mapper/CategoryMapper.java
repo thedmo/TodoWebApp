@@ -18,6 +18,7 @@ public class CategoryMapper {
         CategoryModel model = new CategoryModel(entity.getName());
         model.setId(entity.getId());
         model.setColor(entity.getColor());
+        model.setUsageCount(entity.getTodos().size());
         return model;
     }
 }
