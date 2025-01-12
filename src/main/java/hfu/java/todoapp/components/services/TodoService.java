@@ -56,11 +56,11 @@ public class TodoService {
         return todos;
     }
 
-    public List<TodoModel> getCompleted() {
+    public List<TodoModel> getPending() {
         refreshTodos();
         return getAll()
                 .stream()
-                .filter(TodoModel::isDone)
+                .filter(todo -> !todo.isDone())
                 .toList();
     }
 
@@ -111,8 +111,8 @@ public class TodoService {
 
     private List<Integer> lastSortOrder;
 
-    public List<TodoModel> getAllSorted(int column, boolean ascending, boolean keepOrder) {
-        List<TodoModel> sortedList = new ArrayList<>(getAll());
+    public List<TodoModel> getSorted(int column, boolean ascending, boolean keepOrder, boolean isFiltered) {
+        List<TodoModel> resultList = new ArrayList<>(isFiltered ? getPending() : getAll());
 
         if (keepOrder) {
             if (lastSortOrder != null) {
@@ -120,7 +120,7 @@ public class TodoService {
                 for (int i = 0; i < lastSortOrder.size(); i++) {
                     orderMap.put(lastSortOrder.get(i), i);
                 }
-                sortedList.sort(Comparator.comparing(todo -> orderMap.getOrDefault(todo.getId(), Integer.MAX_VALUE)));
+                resultList.sort(Comparator.comparing(todo -> orderMap.getOrDefault(todo.getId(), Integer.MAX_VALUE)));
             }
         } else {
 
@@ -138,12 +138,12 @@ public class TodoService {
                 comparator = comparator.reversed();
             }
 
-            sortedList.sort(comparator);
+            resultList.sort(comparator);
         }
-        lastSortOrder = sortedList.stream()
+        lastSortOrder = resultList.stream()
                 .map(TodoModel::getId)
                 .collect(Collectors.toList());
 
-        return sortedList;
+        return resultList;
     }
 }

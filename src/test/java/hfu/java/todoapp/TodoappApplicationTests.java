@@ -212,10 +212,10 @@ class TodoappApplicationTests {
 			todoService.save(todoToUpdate);
 		}
 
-		// Verify that the updates were successful
-		List<TodoModel> updatedTodos = todoService.getCompleted();
+		// Verifies, that all the acquired todos are pending
+		List<TodoModel> updatedTodos = todoService.getPending();
 		for (TodoModel todo : updatedTodos) {
-			assertTrue(todo.isDone());
+			assertTrue(!todo.isDone());
 		}
 	}
 

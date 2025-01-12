@@ -15,7 +15,7 @@
             <h2>Tasks</h2>
 
             <div class="d-flex">
-                <form th:action="@{/todos/newTask}" method="get" class="mr-2">
+                <form th:action="@{/todos/edit/}" method="get" class="mr-2">
                     <button type="submit" class="btn btn-primary">New Todo</button>
                 </form>
                 <form th:action="@{/todos/categories/list}" method="get">
@@ -26,7 +26,17 @@
 
         <div class="card">
             <div class="card-header">
-                Planned tasks
+                <div class="d-flex justify-content-between align-items-center">
+                    Planned tasks
+
+                    <div class="d-flex">
+                        <form th:action="@{/todos/filter}" method="post">
+                            <label for="isFiltered" class="mr-2">hide completed</label>
+                            <input type="checkbox" class="auto-submit" name="isFiltered" th:checked="${isFiltered}"
+                                id="isFiltered">
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -35,47 +45,57 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <form th:action="@{/todos/updateSort}" method="post">
+                                    <form th:action="@{/todos/sort}" method="post">
                                         <input type="hidden" name="column" th:value="0" />
                                         <input type="hidden" name="ascending" th:value="${ascending}" />
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Done <span th:if="${sortColumn == 0}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Done <span th:if="${sortColumn == 0}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/updateSort}" method="post">
+                                    <form th:action="@{/todos/sort}" method="post">
                                         <input type="hidden" name="column" th:value="1" />
                                         <input type="hidden" name="ascending" th:value="${ascending}" />
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Task <span th:if="${sortColumn == 1}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Task <span th:if="${sortColumn == 1}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/updateSort}" method="post">
+                                    <form th:action="@{/todos/sort}" method="post">
                                         <input type="hidden" name="column" th:value="2" />
                                         <input type="hidden" name="ascending" th:value="${ascending}" />
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Category <span th:if="${sortColumn == 2}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Category <span th:if="${sortColumn == 2}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/updateSort}" method="post">
+                                    <form th:action="@{/todos/sort}" method="post">
                                         <input type="hidden" name="column" th:value="3" />
                                         <input type="hidden" name="ascending" th:value="${ascending}" />
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Due date <span th:if="${sortColumn == 3}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Due date <span th:if="${sortColumn == 3}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/updateSort}" method="post">
+                                    <form th:action="@{/todos/sort}" method="post">
                                         <input type="hidden" name="column" th:value="4" />
                                         <input type="hidden" name="ascending" th:value="${ascending}" />
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Priority <span th:if="${sortColumn == 4}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Priority <span th:if="${sortColumn == 4}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
@@ -86,7 +106,7 @@
                         <tbody>
                             <tr th:each="todo : ${todos}">
                                 <td th:data-order="${todo.isDone ? 1 : 0}">
-                                    <form th:action="@{/todos/updateStatus}" method="post" style="display: inline;">
+                                    <form th:action="@{/todos/update}" method="post" style="display: inline;">
                                         <input type="checkbox" name="isDone" th:checked="${todo.isDone}"
                                             class="auto-submit" formmethod="dialog" />
                                         <input type="hidden" name="id" th:value="${todo.id}" />
@@ -104,7 +124,7 @@
                                     </container>
                                 </td>
                                 <td>
-                                    <form th:action="@{/todos/editTask}" method="get">
+                                    <form th:action="@{/todos/edit/}" method="get">
                                         <input type="hidden" name="id" th:value="${todo.id}" />
                                         <button type="submit">edit</button>
                                     </form>

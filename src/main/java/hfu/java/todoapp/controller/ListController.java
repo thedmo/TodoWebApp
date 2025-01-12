@@ -1,22 +1,23 @@
 package hfu.java.todoapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import hfu.java.todoapp.components.services.TodoService;
 
 @Controller
+@RequestMapping("/todos")
 public class ListController {
     private final TodoService todoService;
     private int sortColumn = 0;
     private boolean ascending = true;
+    private boolean isFiltered = false;
 
     @Autowired
     public ListController(TodoService todoService) {
@@ -28,30 +29,38 @@ public class ListController {
         return "redirect:/todos/list";
     }
 
-    @GetMapping("/todos/list")
-    public String list(@RequestParam(value = "keepOrder", required = false, defaultValue = "true") boolean keepOrder, Model model) {
-        model.addAttribute("todos", todoService.getAllSorted(sortColumn, ascending, keepOrder));
+    @GetMapping("/list")
+    public String list(@RequestParam(value = "keepOrder", required = false, defaultValue = "true") boolean keepOrder,
+            Model model) {
+        model.addAttribute("todos", todoService.getSorted(sortColumn, ascending, keepOrder, isFiltered));
         model.addAttribute("sortColumn", sortColumn);
         model.addAttribute("ascending", ascending);
+        model.addAttribute("isFiltered", isFiltered);
         return "list";
     }
 
-    @PostMapping("/todos/updateStatus")
+    @PostMapping("/filter")
+    public String filterList(@RequestParam(value = "isFiltered", required = false, defaultValue = "false") boolean isFiltered, Model model) {
+        this.isFiltered = isFiltered;
+        return "redirect:/todos/list";
+    }
+
+    @PostMapping("/update")
     public String updateTodoStatus(@RequestParam("id") Integer id,
             @RequestParam(value = "isDone", required = false) boolean isDone) {
         todoService.updateTodoStatus(id, isDone);
         return "redirect:/todos/list";
     }
 
-    @PostMapping("/todos/delete")
+    @PostMapping("/delete")
     public String deleteTodo(@RequestParam("id") Integer id) {
         todoService.deleteTodoById(id);
         return "redirect:/todos/list";
     }
 
-    @PostMapping("/todos/updateSort")
-    public String updateSort(@RequestParam("column") int column, 
-                            @RequestParam("ascending") boolean ascending, Model model) {
+    @PostMapping("/sort")
+    public String updateSort(@RequestParam("column") int column,
+            @RequestParam("ascending") boolean ascending, Model model) {
 
         this.ascending = sortColumn == column ? !ascending : ascending;
         this.sortColumn = column;

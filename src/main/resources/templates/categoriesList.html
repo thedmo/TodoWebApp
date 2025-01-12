@@ -33,7 +33,7 @@
 
                     <div class="col-md-4">
                         <label for="name" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <input type="text" class="form-control" name="name" required>
                     </div>
 
                     <div class="col-md-4">
@@ -48,6 +48,7 @@
             </div>
         </div>
 
+
         <!-- Categories List -->
         <div class="card">
             <div class="card-header">
@@ -59,29 +60,41 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <form th:action="@{/todos/categories/updateSort}" method="post" style="display: inline;">
+                                    <form th:action="@{/todos/categories/updateSort}" method="post"
+                                        style="display: inline;">
                                         <input type="hidden" name="column" value="0">
-                                        <input type="hidden" name="ascending" th:value="${sortColumn == 0 ? !ascending : true}">
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Name <span th:if="${sortColumn == 0}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <input type="hidden" name="ascending"
+                                            th:value="${sortColumn == 0 ? !ascending : true}">
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Name <span th:if="${sortColumn == 0}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/categories/updateSort}" method="post" style="display: inline;">
+                                    <form th:action="@{/todos/categories/updateSort}" method="post"
+                                        style="display: inline;">
                                         <input type="hidden" name="column" value="1">
-                                        <input type="hidden" name="ascending" th:value="${sortColumn == 1 ? !ascending : true}">
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Color <span th:if="${sortColumn == 1}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <input type="hidden" name="ascending"
+                                            th:value="${sortColumn == 1 ? !ascending : true}">
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Color <span th:if="${sortColumn == 1}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
                                 <th>
-                                    <form th:action="@{/todos/categories/updateSort}" method="post" style="display: inline;">
+                                    <form th:action="@{/todos/categories/updateSort}" method="post"
+                                        style="display: inline;">
                                         <input type="hidden" name="column" value="2">
-                                        <input type="hidden" name="ascending" th:value="${sortColumn == 2 ? !ascending : true}">
-                                        <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
-                                            Usage Count <span th:if="${sortColumn == 2}" th:text="${ascending ? '↑' : '↓'}"></span>
+                                        <input type="hidden" name="ascending"
+                                            th:value="${sortColumn == 2 ? !ascending : true}">
+                                        <button type="submit"
+                                            style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+                                            Usage Count <span th:if="${sortColumn == 2}"
+                                                th:text="${ascending ? '↑' : '↓'}"></span>
                                         </button>
                                     </form>
                                 </th>
@@ -118,12 +131,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script>
-        document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
+        document.querySelectorAll('table input[type="color"]').forEach(colorPicker => {
             colorPicker.addEventListener('change', function () {
                 this.closest('form').submit();
             });
         });
-        
     </script>
 </body>
 
