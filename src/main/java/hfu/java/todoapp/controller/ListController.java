@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import hfu.java.todoapp.common.models.TodoModel;
 import hfu.java.todoapp.components.services.TodoService;
+import java.util.List;
 
 @Controller
 @RequestMapping("/todos")
@@ -32,10 +34,12 @@ public class ListController {
     @GetMapping("/list")
     public String list(@RequestParam(value = "keepOrder", required = false, defaultValue = "true") boolean keepOrder,
             Model model) {
-        model.addAttribute("todos", todoService.getSorted(sortColumn, ascending, keepOrder, isFiltered));
+        List<TodoModel> todos = todoService.getSorted(sortColumn, ascending, keepOrder, isFiltered);
+        model.addAttribute("todos", todos);
         model.addAttribute("sortColumn", sortColumn);
         model.addAttribute("ascending", ascending);
         model.addAttribute("isFiltered", isFiltered);
+        model.addAttribute("allTasksDone", todos.isEmpty() || todos.stream().allMatch(TodoModel::isDone));
         return "list";
     }
 

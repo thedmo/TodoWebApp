@@ -40,6 +40,14 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
+                    <div th:if="${allTasksDone}" style="display: grid; place-items: left;">
+                        <img th:src="@{/images/allDone.png}" alt="All tasks completed"
+                            style="width: auto; max-width: 100%; height: auto; grid-area: 1/1;">
+                        <h2 style="grid-area: 1/1; color: rgb(0, 0, 0); margin-left: 3px;">
+                            All Tasks Completed!
+                        </h2>
+                    </div>
+
                     <table id="todoTable" class="table" th:data-sort-column="${sortColumn}"
                         th:data-sort-direction="${ascending ? 'asc' : 'desc'}">
                         <thead>
