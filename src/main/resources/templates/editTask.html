@@ -78,15 +78,23 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
+        /**
+         * Task Edit Form Validation and Interaction Logic
+         * Handles form validation, AI category integration, and submit button state management.
+         */
         $(document).ready(function () {
-            // Function to check if form is valid
+            /**
+             * Updates the submit button state based on form validation rules:
+             * - Either a category must be selected or AI category must be enabled
+             * - Task description must not be empty
+             */
             function updateSubmitButton() {
                 const categoryId = $('select[name="categoryId"]').val();
                 const aiChecked = $('#aiCategory').is(':checked');
                 const submitButton = $('button[type="submit"]');
                 const taskText = $('#task').val().trim();
 
-                // Disable button if no category is selected and AI is off
+                // Disables button if no category is selected and AI is off
                 if ((categoryId !== '-1' || aiChecked) && taskText !== '') {
                     submitButton.prop('disabled', false);
                 } else {
@@ -94,7 +102,10 @@
                 }
             }
 
-            // Handle AI Category checkbox
+            /**
+             * AI Category checkbox handler
+             * Disables manual category selection when AI is enabled
+             */
             $('#aiCategory').change(function () {
                 if ($(this).is(':checked')) {
                     $('select[name="categoryId"]').prop('disabled', true);
@@ -104,17 +115,23 @@
                 updateSubmitButton();
             });
 
-            // Handle category selection changes
+            /**
+             * Category selection change handler
+             * Updates form validation state
+             */
             $('select[name="categoryId"]').change(function () {
                 updateSubmitButton();
             });
 
-            // task text change
+            /**
+             * Task description input handler
+             * Updates form validation state on text changes
+             */
             $('#task').on('input', function () {
                 updateSubmitButton();
             });
 
-            // Initial check on page load
+            // Initialize form validation state
             updateSubmitButton();
         });
     </script>

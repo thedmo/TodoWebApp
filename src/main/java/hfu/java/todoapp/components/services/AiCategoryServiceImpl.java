@@ -13,11 +13,18 @@ import org.springframework.stereotype.Service;
 
 import hfu.java.todoapp.common.models.CategoryModel;
 
+/**
+ * Implementation of the AiCategoryService interface.
+ * Provides AI-assisted category suggestions for tasks.
+ */
 @Service
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class AiCategoryServiceImpl implements AiCategoryService {
 
+    /** Chat model for AI interactions */
     private ChatModel chatModel;
+
+    /** Service for managing categories */
     private CategoryService categoryService;
 
     @Autowired
@@ -26,6 +33,11 @@ public class AiCategoryServiceImpl implements AiCategoryService {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Requests an AI-suggested category for a given task description.
+     * @param task The description of the task
+     * @return A CategoryModel representing the suggested category
+     */
     @Override
     public CategoryModel requestCategory(String task) {
         StringBuilder prompStringBuilder = new StringBuilder();

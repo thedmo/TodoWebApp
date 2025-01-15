@@ -12,6 +12,11 @@ import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.common.models.TodoModel;
 import hfu.java.todoapp.components.services.*;
 
+/**
+ * Development data initializer that populates the database with sample data.
+ * Only active when the "dev" profile is enabled.
+ * Creates sample categories and todos for testing and development purposes.
+ */
 @Component
 @Profile("dev")
 public class DevDataInitializer implements CommandLineRunner {
@@ -25,11 +30,19 @@ public class DevDataInitializer implements CommandLineRunner {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Runs on application startup when dev profile is active.
+     * Creates sample data in the database.
+     */
     @Override
     public void run(String... args) throws Exception {
         initializeDevData();
     }
-    
+
+    /**
+     * Creates sample categories and todos for development testing.
+     * Includes various categories (Work, Personal, etc.) and associated tasks.
+     */
     private void initializeDevData() {
         // Creates categories
         CategoryModel foodCategory = new CategoryModel("Food", "#90EE90"); // Light green

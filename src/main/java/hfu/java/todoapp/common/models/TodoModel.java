@@ -6,12 +6,27 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import hfu.java.todoapp.common.enums.Priority;
 
+/**
+ * Model class representing a Todo item in the application.
+ * Contains all the business logic properties of a todo task.
+ */
 public class TodoModel {
+    /** Unique identifier for the todo item */
     private Integer id;
+    
+    /** The actual task description */
     private String task;
+    
+    /** The category this todo belongs to */
     private CategoryModel category;
+    
+    /** Priority level of the todo */
     private Priority priority;
+    
+    /** Completion status of the todo */
     private boolean isDone;
+    
+    /** Due date for the todo item */
     private LocalDate dueDate;
 
     public Integer getId() {

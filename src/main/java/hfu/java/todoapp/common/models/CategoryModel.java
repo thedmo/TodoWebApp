@@ -1,9 +1,20 @@
 package hfu.java.todoapp.common.models;
 
+/**
+ * Model class that represents a category in the application.
+ */
 public class CategoryModel {
+
+    /** Unique identifier for the category */
     private Integer id = null;
+
+    /** Name of the category */
     private String name;
+
+    /** Color code for the category */
     private String color;
+
+    /** Count of tasks using this category */
     private int usageCount;
 
     public Integer getId() {

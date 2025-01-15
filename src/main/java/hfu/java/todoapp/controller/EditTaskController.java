@@ -14,13 +14,23 @@ import hfu.java.todoapp.components.services.CategoryService;
 import hfu.java.todoapp.components.services.TodoService;
 import hfu.java.todoapp.components.services.AiCategoryService;
 
+/**
+ * Controller for handling todo task creation and editing.
+ * Provides functionality for:
+ * - Creating new todo tasks
+ * - Editing existing tasks
+ * - Managing task categories (manual and AI-assisted)
+ * - Setting task properties (priority, due date, etc.)
+ */
 @Controller
 @RequestMapping("/todos/edit")
 public class EditTaskController {
-
-    private TodoService todoService;
-    private CategoryService categoryService;
-    private AiCategoryService aiCategoryService;
+    /** Service for managing todo operations */
+    private final TodoService todoService;
+    /** Service for managing categories */
+    private final CategoryService categoryService;
+    /** Service for AI-assisted category suggestions */
+    private final AiCategoryService aiCategoryService;
 
     @Autowired
     public EditTaskController(TodoService todoService, CategoryService categoryService,
@@ -30,6 +40,13 @@ public class EditTaskController {
         this.aiCategoryService = aiCategoryService;
     }
 
+    /**
+     * Displays the task edit form.
+     * If ID is provided, loads existing task for editing, otherwise prepares for new task creation.
+     * @param id Optional ID of the task to edit
+     * @param model Spring MVC model
+     * @return The edit task view template name
+     */
     @GetMapping("/")
     public String showEditPage(@RequestParam(value = "id", required = false, defaultValue = "-1") Integer id,
             Model model) {
@@ -46,6 +63,15 @@ public class EditTaskController {
         return "editTask";
     }
 
+    /**
+     * Processes the task edit form submission.
+     * Handles both new task creation and existing task updates.
+     * Supports both manual category selection and AI-assisted categorization.
+     * @param task The todo model from the form
+     * @param categoryId The selected category ID
+     * @param aiCategory Whether to use AI for category suggestion
+     * @return Redirects to the list view after successful save
+     */
     @PostMapping("/update")
     public String saveTask(
             @ModelAttribute TodoModel task,
