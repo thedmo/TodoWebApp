@@ -17,8 +17,8 @@ import hfu.java.todoapp.common.enums.Priority;
 import hfu.java.todoapp.common.models.CategoryModel;
 import hfu.java.todoapp.common.models.TodoModel;
 import hfu.java.todoapp.components.services.AiCategoryService;
-import hfu.java.todoapp.components.services.CategoryService;
-import hfu.java.todoapp.components.services.TodoService;
+import hfu.java.todoapp.components.services.CategoryServiceImpl;
+import hfu.java.todoapp.components.services.TodoServiceImpl;
 
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -31,12 +31,12 @@ import org.junit.jupiter.api.Order;
 @TestMethodOrder(OrderAnnotation.class)
 class TodoappApplicationTests {
 
-	private TodoService todoService;
-	private CategoryService categoryService;
+	private TodoServiceImpl todoService;
+	private CategoryServiceImpl categoryService;
 	private AiCategoryService aiCategoryService;
 
 	@Autowired
-	public TodoappApplicationTests(TodoService todoService, CategoryService categoryService, AiCategoryService aiCategoryService) {
+	public TodoappApplicationTests(TodoServiceImpl todoService, CategoryServiceImpl categoryService, AiCategoryService aiCategoryService) {
 		this.todoService = todoService;
 		this.categoryService = categoryService;
 		this.aiCategoryService = aiCategoryService;

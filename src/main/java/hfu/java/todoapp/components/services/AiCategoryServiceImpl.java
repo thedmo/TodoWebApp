@@ -25,10 +25,10 @@ public class AiCategoryServiceImpl implements AiCategoryService {
     private ChatModel chatModel;
 
     /** Service for managing categories */
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @Autowired
-    public AiCategoryServiceImpl(@Qualifier("OpenAi") ChatModel chatModel, CategoryService categoryService) {
+    public AiCategoryServiceImpl(@Qualifier("OpenAi") ChatModel chatModel, CategoryServiceImpl categoryService) {
         this.chatModel = chatModel;
         this.categoryService = categoryService;
     }

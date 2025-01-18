@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hfu.java.todoapp.common.models.TodoModel;
-import hfu.java.todoapp.components.services.CategoryService;
-import hfu.java.todoapp.components.services.TodoService;
-import hfu.java.todoapp.components.services.AiCategoryService;
+import hfu.java.todoapp.components.services.*;
 
 /**
  * Controller for handling todo task creation and editing.

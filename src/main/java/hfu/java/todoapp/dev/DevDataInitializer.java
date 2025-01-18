@@ -21,11 +21,11 @@ import hfu.java.todoapp.components.services.*;
 @Profile("dev")
 public class DevDataInitializer implements CommandLineRunner {
 
-    private final TodoService todoService;
-    private final CategoryService categoryService;
+    private final TodoServiceImpl todoService;
+    private final CategoryServiceImpl categoryService;
 
     @Autowired
-    public DevDataInitializer(TodoService todoService, CategoryService categoryService) {
+    public DevDataInitializer(TodoServiceImpl todoService, CategoryServiceImpl categoryService) {
         this.todoService = todoService;
         this.categoryService = categoryService;
     }

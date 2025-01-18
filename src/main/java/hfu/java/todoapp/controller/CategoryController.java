@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import hfu.java.todoapp.common.models.CategoryModel;
-import hfu.java.todoapp.components.services.CategoryService;
+import hfu.java.todoapp.components.services.*;
 
 /**
  * Controller for managing categories in the application.
