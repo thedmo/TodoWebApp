@@ -14,7 +14,7 @@ import hfu.java.todoapp.components.services.*;
 
 /**
  * Development data initializer that populates the database with sample data.
- * Only active when the "dev" profile is enabled.
+ * Only active when the "dev" profile is enabled in application.properties.
  * Creates sample categories and todos for testing and development purposes.
  */
 @Component

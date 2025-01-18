@@ -13,7 +13,7 @@ import hfu.java.todoapp.components.services.CategoryService;
  * - Viewing all categories
  * - Creating new categories
  * - Deleting existing categories
- * - Viewing category usage statistics
+ * - Display category usage
  */
 @Controller
 @RequestMapping("/todos/categories")

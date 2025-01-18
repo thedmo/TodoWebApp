@@ -1,5 +1,9 @@
 package hfu.java.todoapp.common.enums;
 
+/**
+ * Enum representing the priority levels for a Todo item.
+ * Each level is associated with a numerical value.
+ */
 public enum Priority {
     Priority_1(0),
     Priority_2(1),
@@ -7,6 +11,9 @@ public enum Priority {
     Priority_4(3),
     Priority_5(4);
 
+    /**
+     * The numerical value associated with the priority level.
+     */
     private int value;
 
     private Priority(int Value) {
@@ -17,6 +24,12 @@ public enum Priority {
         return value;
     }
 
+    /**
+     * Retrieves the Priority enum value based on an integer value.
+     * @param value The integer value representing the priority level.
+     * @return The corresponding Priority enum value.
+     * @throws IllegalArgumentException if the value is not found in the enum.
+     */
     public static Priority getByInt(int value) {
         switch (value) {
             case 0:
@@ -34,6 +47,10 @@ public enum Priority {
         }
     }
 
+    /**
+     * Returns a string representation of the priority level.
+     * @return A string representing the priority level.
+     */
     @Override
     public String toString() {
         switch (this) {
